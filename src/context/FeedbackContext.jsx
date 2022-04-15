@@ -58,7 +58,12 @@ export const FeedbackProvider = ({ children }) => {
 
         const data = await response.json();
 
-        setFeedback(feedback.map(item => item.id === id ? {...item, ...data } : item))
+        setFeedback(feedback.map(item => item.id === id ? data : item));
+
+        setFeedbackEdit({
+            item: {},
+            edit: false
+          });        
     };
 
     // Set item to be updated
@@ -69,17 +74,19 @@ export const FeedbackProvider = ({ children }) => {
         })
     };
 
-    return <FeedbackContext.Provider value={{
-        feedback,
-        feedbackEdit,
-        isLoading,
-        deleteFeedback,
-        addFeedback,
-        editFeedback,
-        updateFeedback,
+    return (<FeedbackContext.Provider 
+        value={{
+            feedback,
+            feedbackEdit,
+            isLoading,
+            deleteFeedback,
+            addFeedback,
+            editFeedback,
+            updateFeedback,
     }}>
         { children }
     </FeedbackContext.Provider>
+    );
 }
 
 export default FeedbackContext;

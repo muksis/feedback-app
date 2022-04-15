@@ -5,9 +5,9 @@ function FeedbackStats() {
   const {feedback} = useContext(FeedbackContext);
 
   //Calculate rating avg
-  let average = feedback.reduce((acc, cur) => acc + cur.rating, 0) / feedback.length;
-
-  average = average.toFixed(1).replace(/[.]0$/, '');
+  const average = Math.round(
+    feedback.reduce((acc, { rating }) => acc + rating, 0) / feedback.length
+  );
 
   return (
     <div className='feedback-stats'>

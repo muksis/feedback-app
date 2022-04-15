@@ -20,24 +20,24 @@ function FeedbackForm() {
     }
   }, [feedbackEdit]);
 
-  const handleTextChange = (e) => {
-      if(text === '') {
-          setBtnDisabled(true);
-          setMessage(null);
-      } else if(text !== '' && text.trim().length <= 10) {
-          setBtnDisabled(true);
-          setMessage('Text should be at least 10 characters long');
-      } else {
-          setBtnDisabled(false);
-          setMessage(null);
-      }
-
-      setText(e.target.value);
+  const handleTextChange = ({ target: { value } }) => {
+    if (value === '') {
+      setBtnDisabled(true);
+      setMessage(null);
+      
+    } else if (value.trim().length < 10) {
+      setMessage('Text must be at least 10 characters');
+      setBtnDisabled(true);
+    } else {
+      setMessage(null);
+      setBtnDisabled(false);
+    }
+    setText(value);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(text.trim().length > 10) {
+    if (text.trim().length > 10) {
       const newFeedback = {
         text,
         rating
@@ -49,6 +49,8 @@ function FeedbackForm() {
       addFeedback(newFeedback);
     }
     
+    setBtnDisabled(true);
+    setRating(10);
     setText('');
     }
   }
@@ -56,13 +58,21 @@ function FeedbackForm() {
   return (
     <Card>
       <form onSubmit={handleSubmit}>
-          <h2>How would you rate your service with us</h2>
-          <RatingSelect select={rating => setRating(rating)}/>
-          <div className='nput-group'>
-              <input onChange={handleTextChange} type='text' placeholder='Write a review' value={text} />
-              <Button type='submit' isDisabled={btnDisabled}>Send</Button>
-          </div>
-          {message && <div className='message'>{message}</div>}
+        <h2>How would you rate your service with us?</h2>
+        <RatingSelect select={setRating} selected={rating} />
+        <div className='input-group'>
+          <input
+            onChange={handleTextChange}
+            type='text'
+            placeholder='Write a review'
+            value={text}
+          />
+          <Button type='submit' isDisabled={btnDisabled}>
+            Send
+          </Button>
+        </div>
+
+        {message && <div className='message'>{message}</div>}
       </form>
     </Card>
   )
